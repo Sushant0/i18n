@@ -1,4 +1,6 @@
 var pg = require('pg');
+var obj = require('../Model/object.js');
+
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/stringDN';
 var client = new pg.Client(connectionString);
 // client.connect();
@@ -17,7 +19,6 @@ function connectDB(){
 	});
 }
 
-
 DBUtil.prototype.search = function (query1,callback){
 
 	var query = client.query("SELECT key FROM list WHERE value = $1 ", [query1]);
@@ -31,7 +32,34 @@ DBUtil.prototype.search = function (query1,callback){
 
 DBUtil.prototype.insertdb = function (key,value){
 	var query = client.query("INSERT into list (key, value, type) VALUES ($1, $2, $3) ", [key, value,1]);
+}
 
+DBUtil.prototype.update = function (updateKey,callback){
+	console.log('update');
+}
+
+DBUtil.prototype.showAll = function (callback){
+	// var obj = new OBJ();
+	// obj.setKey('test');
+	var list = [];
+	var query = client.query('SELECT * FROM list;');
+	query.on('row',function(row){
+		var tempObj = new OBJ(row);
+		console.log(tempObj.getKey() + tempObj.getValue() + tempObj.getType());
+		list.push(tempObj);
+		console.log(list);
+	});
+	query.on('end',function(results){
+		// list.push(results.rows);
+		// console.log(results.rows[0].key);
+		// console.log(results + results.rows);
+		// for (var i in results.rows) {
+		//   var val = results[i];
+		//   console.log(Object.keys(val));
+		// }
+	});
+
+	// console.log('showAll'+obj.getKey());
 }
 
 DBUtil.prototype.update = function (query,callback){
@@ -43,4 +71,8 @@ query1.on('end', function() {
    console.log("List table successfully created");
 });
 
-module.exports = DBUtil;
+var dbUtil = new DBUtil();
+
+dbUtil.showAll();
+
+// module.exports = DBUtil;
