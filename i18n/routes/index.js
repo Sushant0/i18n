@@ -12,11 +12,10 @@ var andriodData = '';
 
 var dbUtil = new DBUtil();
 
-var callback = function(){
-	console.log('call back');
+var callback = function(result){
+	console.log(result);
 }
 
-dbUtil.search('hello', callback);
 
 var createIOSFile = function(key, value){
 
@@ -50,9 +49,16 @@ createAndriodFile(key,value);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index.ejs');
+});
+router.post('/search', function(req, res, next){
+	console.log("::: in search ::");
+   dbUtil.search(req.body.clubname, callback);
+
+});
+router.post('/insert', function(req, res, next){
+   dbUtil.insertdb(req.body.key, req.body.value);
 });
 
-// console.log("something2 test");
 
 module.exports = router;
