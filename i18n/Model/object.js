@@ -1,36 +1,36 @@
 
-var key;
-var value;
-var type;
+var key = "";
+var value = "";
+var type = 0;
 
 OBJ = function(valueJson){
-	key = valueJson.key
-	value = valueJson.value
-	type = valueJson.type;
+	this.key = valueJson.key
+	this.value = valueJson.value
+	this.type = valueJson.type;
 };
 
 OBJ.prototype.getKey = function(){
-	return key;
+	return this.key;
 }
 
 OBJ.prototype.setKey = function(value){
-	key = value;
+	this.key = value;
 }
 
 OBJ.prototype.getValue = function(){
-	return value;
+	return this.value;
 }
 
 OBJ.prototype.setValue = function(val){
-	value = val;
+	this.value = val;
 }
 
 OBJ.prototype.getType = function(){
-	return type;
+	return this.type;
 }
 
 OBJ.prototype.setType = function(value){
-	type = value;
+	this.type = value;
 }
 
 module.exports = OBJ;

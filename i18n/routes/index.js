@@ -1,4 +1,6 @@
 var db = require('./dbUtil.js');
+
+require('../Model/object.js');
 var express = require('express');
 var fs = require('fs');
 var router = express.Router();
@@ -44,13 +46,16 @@ var createAndriodFile = function(key, value){
 }
 
 
-createIOSFile(key,value);
-createAndriodFile(key,value);
+// createIOSFile(key,value);
+// createAndriodFile(key,value);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index.ejs');
+	dbUtil.showAll(function(list){ 
+		res.render('index.ejs',{ list : list});
+	});
 });
+
 router.post('/search', function(req, res, next){
 	console.log("::: in search ::");
    dbUtil.search(req.body.clubname, callback);

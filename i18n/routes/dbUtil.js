@@ -45,18 +45,10 @@ DBUtil.prototype.showAll = function (callback){
 	var query = client.query('SELECT * FROM list;');
 	query.on('row',function(row){
 		var tempObj = new OBJ(row);
-		console.log(tempObj.getKey() + tempObj.getValue() + tempObj.getType());
-		list.push(tempObj);
-		console.log(list);
+		list.push(new OBJ(row));
 	});
 	query.on('end',function(results){
-		// list.push(results.rows);
-		// console.log(results.rows[0].key);
-		// console.log(results + results.rows);
-		// for (var i in results.rows) {
-		//   var val = results[i];
-		//   console.log(Object.keys(val));
-		// }
+		callback(list);
 	});
 
 	// console.log('showAll'+obj.getKey());
@@ -71,8 +63,8 @@ query1.on('end', function() {
    console.log("List table successfully created");
 });
 
-var dbUtil = new DBUtil();
+// var dbUtil = new DBUtil();
 
-dbUtil.showAll();
+// dbUtil.showAll();
 
-// module.exports = DBUtil;
+module.exports = DBUtil;
