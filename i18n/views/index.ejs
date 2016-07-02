@@ -7,6 +7,20 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   </head>
   <body>
+    <div id="holder" style = " width:100%;display:none;">     
+    <div id="popup" style = " background:#fff;padding: 28px 26px 33px 25px;">            
+        <div is="content" style = " border-radius: 7px;background:#6b6a63;margin:30px auto 0;padding:6px;position:absolute;width:400px;top: 50%;left: 50%;margin-left: -400px;margin-top: -40px;"> 
+                    <form action="/insert" method="post">
+                    Key :  <input type="text" name="vehicle" value="Bike">
+                    Value :<input type="text" name="vehicle" value="Bike">
+                    Android :<input type="checkbox" name="vehicle" value="Bike">
+                    Ios :<input type="checkbox" name="vehicle" value="Bike">
+                    Verified :<input type="checkbox" name="vehicle" value="Bike">
+                    <button type="submit" value="Submit"> Add </button>
+                </form>
+        </div>
+    </div>
+</div>
 	<table class="mdl-data-table mdl-js-data-table" style="margin: auto;" >
 	  <thead>
 	    <tr>
@@ -34,12 +48,20 @@
 	  </tbody>
 	</table>
 	<div style="width: 500px; margin: 0 auto;">
-		<form style="align-content: center; text-align: center;">
+		
 			<button type="button" value="Submit"> IOS </button>
 			<button type="button" value="Submit"> Andriod </button>
-			<button type="button" value="Submit"> Add </button>
-		</form>
+			<button type="button" value="Submit" onClick = "myFunction()"> Add </button>
 	</div>
+    <script type="text/javascript">
+function myFunction() {
+   document.getElementById('holder').style.display = "block";
+
+}
+function div_hide() {
+    document.getElementById('abc').style.display = "none";
+}
+</script>
   </body>
 </html>
 
