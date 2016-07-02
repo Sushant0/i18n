@@ -1,6 +1,6 @@
-var db = require('./dbUtil.js');
+var db = require('../lib/dbUtil.js');
 
-require('../Model/object.js');
+require('../Model/stringObject.js');
 var express = require('express');
 var fs = require('fs');
 var router = express.Router();
@@ -54,6 +54,16 @@ router.get('/', function(req, res, next) {
 	dbUtil.showAll(function(list){ 
 		res.render('index.ejs',{ list : list});
 	});
+});
+
+router.post('/', function(req, res, next) {
+	console.log('reached'+ JSON.stringify(req.body));
+		if(req.body.hasOwnProperty('Update')){
+			console.log("Update");
+		}
+		else if (req.body.hasOwnProperty('Remove')) {
+			console.log("remove");
+		}
 });
 
 router.post('/search', function(req, res, next){

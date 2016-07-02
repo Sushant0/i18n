@@ -1,5 +1,5 @@
 var pg = require('pg');
-var obj = require('../Model/object.js');
+var obj = require('../Model/stringObject.js');
 
 var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/stringDN';
 var client = new pg.Client(connectionString);
@@ -39,13 +39,10 @@ DBUtil.prototype.update = function (updateKey,callback){
 }
 
 DBUtil.prototype.showAll = function (callback){
-	// var obj = new OBJ();
-	// obj.setKey('test');
 	var list = [];
 	var query = client.query('SELECT * FROM list;');
 	query.on('row',function(row){
-		var tempObj = new OBJ(row);
-		list.push(new OBJ(row));
+		list.push(new StringObject(row));
 	});
 	query.on('end',function(results){
 		callback(list);

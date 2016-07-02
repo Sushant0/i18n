@@ -30,18 +30,33 @@
 	      <th>Andriod</th>
 	      <th>Verified</th>
 	      <th></th>
+	      <th></th>
 	    </tr>
 	  </thead>
 	  <tbody>
 		  <% list.forEach(function(val){ %>
 		  		<tr>
-		  		<form action="demo_form.asp" method="get">
+		  		<form action="/" method="post">
+		  		<% console.log("hello world" + val.getValue() + val.getIsIOS()); %>
 			  		<td class="mdl-data-table__cell--non-numeric"><%= val.getKey(); %></td>
-				    <td><input type="text" name=<%= val.getKey(); %> value="<%= val.getValue(); %>"></td>
-				    <td><input type="checkbox" name="vehicle" value="Bike"></td>
-				    <td><input type="checkbox" name="vehicle" value="Bike"></td>
-				    <td><input type="checkbox" name="vehicle" value="Bike"></td>
-				    <td><button type="submit" value="Submit"> Update </button></td>
+				    <td><input type="text" name=<%= val.getKey(); %> value=<%= val.getValue(); %>></td>
+				    <td><input type="checkbox" name="isIOS" 
+				    	<% if(val.getIsIOS()){ %>
+					    	<%= "checked" %>
+				    	<% } %>
+			    	></td>
+				    <td><input type="checkbox" name="isAndriod"
+					    <% if(val.getIsAndriod()){ %>
+					    	<%= "checked" %>
+				    	<% } %>
+			    	></td>
+				    <td><input type="checkbox" name="isVerified"
+					    <% if(val.getIsVerified()){ %>
+					    	<%= "checked" %>
+				    	<% } %>
+			    	></td>
+				    <td><button type="submit" name="Update"> Update </button></td>
+				    <td><button type="submit" name="Remove"> Remove </button></td>
 			    </form>
 				</tr>
 		   <% }); %>
