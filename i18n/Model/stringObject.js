@@ -5,13 +5,29 @@ var is_IOS = false;
 var is_Andriod = false;
 var is_verified = false;
 
-StringObject = function(valueJson){
-	this.key = valueJson.key
-	this.value = valueJson.value
+StringObject = function(){
+	this.key = "";
+	this.value = "";
+	this.is_IOS = false;
+	this.is_Andriod = false;
+	this.is_verified = false;
+};
+
+StringObject.prototype.initForDB = function(valueJson){
+	this.key = valueJson.key;
+	this.value = valueJson.value;
 	this.is_IOS = valueJson.isIOS;
 	this.is_Andriod = valueJson.isAndriod;
 	this.is_verified = valueJson.isVerified;
 };
+
+StringObject.prototype.initForView = function(valueJson){
+	this.key = valueJson.key;
+	this.value = valueJson.value;
+	this.is_IOS = valueJson.hasOwnProperty('isIOS');
+	this.is_Andriod = valueJson.hasOwnProperty('isAndriod');
+	this.is_verified = valueJson.hasOwnProperty('isVerified');
+}
 
 StringObject.prototype.getKey = function(){
 	return this.key;

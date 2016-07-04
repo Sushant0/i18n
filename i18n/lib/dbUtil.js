@@ -34,15 +34,13 @@ DBUtil.prototype.insertdb = function (key,value){
 	var query = client.query("INSERT into list (key, value, type) VALUES ($1, $2, $3) ", [key, value,1]);
 }
 
-DBUtil.prototype.update = function (updateKey,callback){
-	console.log('update');
-}
-
 DBUtil.prototype.showAll = function (callback){
 	var list = [];
-	var query = client.query('SELECT * FROM list;');
+	var query = client.query('SELECT * FROM list ORDER BY key ASC;');
 	query.on('row',function(row){
-		list.push(new StringObject(row));
+		var stringObject = new StringObject();
+		stringObject.initForDB(row);
+		list.push(stringObject);
 	});
 	query.on('end',function(results){
 		callback(list);
@@ -51,8 +49,16 @@ DBUtil.prototype.showAll = function (callback){
 	// console.log('showAll'+obj.getKey());
 }
 
-DBUtil.prototype.update = function (query,callback){
-	console.log('update');
+DBUtil.prototype.update = function (queryObject,callback,dbUtil){
+		try{
+		var query = client.query("UPDATE list SET value = $1 , \"isIOS\" = $2 , \"isAndriod\" = $3 , \"isVerified\" = $4 where key = $5;",[queryObject.getValue(),queryObject.getIsIOS() ,queryObject.getIsAndriod() , queryObject.getIsVerified() ,queryObject.getKey()]);
+		} catch(err){
+			console.log(err);
+		}	
+	//  var query = client.query("SELECT key FROM list WHERE value = $1;"[queryObject.getValue()]);
+	 query.on('end',function(results){
+	 	dbUtil.showAll(callback);
+	});
 }
 var results = [];
 var query1 = client.query('CREATE TABLE IF NOT EXISTS list (key text not null, value text not null, type int not null, PRIMARY KEY(key, value))');
@@ -60,8 +66,16 @@ query1.on('end', function() {
    console.log("List table successfully created");
 });
 
-// var dbUtil = new DBUtil();
-
-// dbUtil.showAll();
+DBUtil.prototype.remove = function (queryObject,callback,dbUtil){
+	try{
+			var query = client.query("DELETE FROM list WHERE key = $1;",[queryObject.getKey()]);
+			} catch(err){
+				console.log(err);
+			}	
+		//  var query = client.query("SELECT key FROM list WHERE value = $1;"[queryObject.getValue()]);
+		 query.on('end',function(results){
+		 	dbUtil.showAll(callback);
+		});
+}
 
 module.exports = DBUtil;

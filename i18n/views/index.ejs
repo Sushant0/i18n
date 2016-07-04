@@ -38,8 +38,9 @@
 		  		<tr>
 		  		<form action="/" method="post">
 		  		<% console.log("hello world" + val.getValue() + val.getIsIOS()); %>
+			  		<input type="hidden" name="key" value=<%= val.getKey(); %> />
 			  		<td class="mdl-data-table__cell--non-numeric"><%= val.getKey(); %></td>
-				    <td><input type="text" name=<%= val.getKey(); %> value=<%= val.getValue(); %>></td>
+				    <td><input type="text" name="value" value=<%= val.getValue(); %>></td>
 				    <td><input type="checkbox" name="isIOS" 
 				    	<% if(val.getIsIOS()){ %>
 					    	<%= "checked" %>
@@ -68,7 +69,8 @@
 			<button type="button" value="Submit"> Andriod </button>
 			<button type="button" value="Submit" onClick = "myFunction()"> Add </button>
 	</div>
-    <script type="text/javascript">
+
+<script type="text/javascript">
 function myFunction() {
    document.getElementById('holder').style.display = "block";
 

@@ -5,7 +5,7 @@ var express = require('express');
 var fs = require('fs');
 var router = express.Router();
 var ejs = require('ejs');
-
+const path = require('path');
 
 var key = ['Hello','World'];
 var value = ['hello_world','World_hello'];
@@ -57,20 +57,39 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-	console.log('reached'+ JSON.stringify(req.body));
+
+
 		if(req.body.hasOwnProperty('Update')){
 			console.log("Update");
+			var stringObject = new StringObject();
+			stringObject.initForView(req.body);
+			dbUtil.update(stringObject,function(list){ 
+			res.render('index.ejs',{ list : list});
+		},dbUtil);
 		}
 		else if (req.body.hasOwnProperty('Remove')) {
 			console.log("remove");
+			var stringObject = new StringObject();
+			stringObject.initForView(req.body);
+			dbUtil.remove(stringObject,function(list){ 
+			res.render('index.ejs',{ list : list});
+		},dbUtil);
 		}
 });
+
+router.get('/ios', function(req, res, next) {
+		console.log(path.join(__dirname) + '/../helloworld.xml');
+		// res.send('test');
+		res.sendFile(path.join(__dirname) + '/test.xml');
+		// res.render('test.xml');
+	});
 
 router.post('/search', function(req, res, next){
 	console.log("::: in search ::");
    dbUtil.search(req.body.clubname, callback);
 
 });
+
 router.post('/insert', function(req, res, next){
    dbUtil.insertdb(req.body.key, req.body.value);
 });
