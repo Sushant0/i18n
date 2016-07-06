@@ -2,52 +2,57 @@ var db = require('../lib/dbUtil.js');
 
 require('../Model/stringObject.js');
 var express = require('express');
-var fs = require('fs');
 var router = express.Router();
 var ejs = require('ejs');
-const path = require('path');
+var fs = require('fs');
 
-var key = ['Hello','World'];
-var value = ['hello_world','World_hello'];
+const path = require('path');
 var iosData = '';
 var andriodData = '';
 
 var dbUtil = new DBUtil();
 
 var callback = function(result){
-	console.log(result);
 }
 
 
-var createIOSFile = function(key, value){
+var createIOSFile = function(){
 
-		iosData = '';
+		fs.writeFile('helloworld.string', "");
+console.log("Creating......");
+		dbUtil.showIosValues(function(list){ 
+				iosData = '';
 
-			for (var i = 0; i < key.length; i++) {
-				iosData += "\""+key[i] + "\" \= \"" + value[i] +"\"\; \n";
-			}
-			fs.writeFile('helloworld.string', iosData, function (err) {
-		  if (err) return console.log(err);
-		  console.log('helloworld.string created');
+
+			list.forEach(function(val){
+				iosData += "\""+val.getKey() + "\" \= \"" + val.getValue() +"\"\; \n";
+				fs.writeFile('helloworld.string', iosData, function (err) {
+		 	    if (err) return console.log(err);
+		  		console.log('helloworld.string created');
+			});
 		});
+	});
 }
+		
 
-var createAndriodFile = function(key, value){
 
-		andriodData = '';
+var createAndriodFile = function(){
 
-			for (var i = 0; i < key.length; i++) {
-				andriodData += "\<"+"string name"+"\="+"\""+key[i] + "\" \>\"" + value[i] + "\"\<\\"+"string"+"\> \; \n";
-			}
-			fs.writeFile('helloworld.xml', andriodData, function (err) {
-		  if (err) return console.log(err);
-		  console.log('helloworld.xml created');
+fs.writeFile('helloworld.xml', "");
+
+	dbUtil.showAndroidValues(function(list){ 
+				andriodData = '';
+
+			list.forEach(function(val){
+				andriodData += "\<"+"string name"+"\="+"\""+val.getKey() + "\" \>\"" + val.getValue() + "\"\<\\"+"string"+"\> \n";
+				fs.writeFile('helloworld.xml', andriodData, function (err) {
+		 	    if (err) return console.log(err);
+		  		console.log('helloworld.xml created');
+			});
 		});
+	});
 }
 
-
-// createIOSFile(key,value);
-// createAndriodFile(key,value);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -60,7 +65,7 @@ router.post('/', function(req, res, next) {
 
 
 		if(req.body.hasOwnProperty('Update')){
-			console.log("Update");
+			console.log("Update",req.body);
 			var stringObject = new StringObject();
 			stringObject.initForView(req.body);
 			dbUtil.update(stringObject,function(list){ 
@@ -78,21 +83,44 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/ios', function(req, res, next) {
-		console.log(path.join(__dirname) + '/../helloworld.xml');
-		// res.send('test');
 		res.sendFile(path.join(__dirname) + '/test.xml');
-		// res.render('test.xml');
 	});
 
 router.post('/search', function(req, res, next){
-	console.log("::: in search ::");
    dbUtil.search(req.body.clubname, callback);
 
 });
 
 router.post('/insert', function(req, res, next){
-   dbUtil.insertdb(req.body.key, req.body.value);
+			var stringObject = new StringObject();
+			stringObject.initForView(req.body);
+			if(stringObject.getValue()==""|| stringObject.getKey()=="")
+			{
+
+			}
+			else{
+					dbUtil.insertdb(stringObject,function(list){ 
+			res.render('index.ejs',{ list : list});
+		},dbUtil);
+			}
+		
 });
+
+router.get('/generateIos', function(req, res, next) {
+	
+		createIOSFile();
+
+
+});
+router.get('/generateAndroid', function(req, res, next) {
+	
+		createAndriodFile();
+
+
+});
+
+
+
 
 
 module.exports = router;

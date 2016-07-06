@@ -30,13 +30,43 @@ DBUtil.prototype.search = function (query1,callback){
 	});
 }
 
-DBUtil.prototype.insertdb = function (key,value){
-	var query = client.query("INSERT into list (key, value, type) VALUES ($1, $2, $3) ", [key, value,1]);
+DBUtil.prototype.insertdb = function (queryObject,callback,dbUtil){
+	var query = client.query("INSERT into list values($1,  $2 ,  $3 ,  $4 ,  $5);",[queryObject.getKey(), queryObject.getValue(),queryObject.getIsIOS() ,queryObject.getIsAndriod() , queryObject.getIsVerified()] );
+	dbUtil.showAll(callback);
+
 }
 
 DBUtil.prototype.showAll = function (callback){
 	var list = [];
 	var query = client.query('SELECT * FROM list ORDER BY key ASC;');
+	query.on('row',function(row){
+		var stringObject = new StringObject();
+		stringObject.initForDB(row);
+		list.push(stringObject);
+	});
+	query.on('end',function(results){
+		callback(list);
+	});
+
+	// console.log('showAll'+obj.getKey());
+}
+DBUtil.prototype.showAndroidValues = function (callback){
+	var list = [];
+	var query = client.query("SELECT * FROM list WHERE \"isAndriod\" is true AND \"isVerified\" is true;");
+	query.on('row',function(row){
+		var stringObject = new StringObject();
+		stringObject.initForDB(row);
+		list.push(stringObject);
+	});
+	query.on('end',function(results){
+		callback(list);
+	});
+
+	// console.log('showAll'+obj.getKey());
+}
+DBUtil.prototype.showIosValues = function (callback){
+	var list = [];
+	var query = client.query("SELECT * FROM list WHERE \"isIOS\" is true AND \"isVerified\" is true;");
 	query.on('row',function(row){
 		var stringObject = new StringObject();
 		stringObject.initForDB(row);
@@ -61,7 +91,7 @@ DBUtil.prototype.update = function (queryObject,callback,dbUtil){
 	});
 }
 var results = [];
-var query1 = client.query('CREATE TABLE IF NOT EXISTS list (key text not null, value text not null, type int not null, PRIMARY KEY(key, value))');
+var query1 = client.query('CREATE TABLE IF NOT EXISTS list (key text not null, value text not null, \"isAndriod\" boolean, \"isIOS\" boolean,\"isVerified\" boolean,PRIMARY KEY(key))');
 query1.on('end', function() {
    console.log("List table successfully created");
 });
