@@ -84,7 +84,7 @@ DBUtil.prototype.update = function (queryObject,callback,dbUtil){
 		var query = client.query("UPDATE list SET value = $1 , \"isIOS\" = $2 , \"isAndriod\" = $3 , \"isVerified\" = $4 where key = $5;",[queryObject.getValue(),queryObject.getIsIOS() ,queryObject.getIsAndriod() , queryObject.getIsVerified() ,queryObject.getKey()]);
 		} catch(err){
 			console.log(err);
-		}	
+		}
 	//  var query = client.query("SELECT key FROM list WHERE value = $1;"[queryObject.getValue()]);
 	 query.on('end',function(results){
 	 	dbUtil.showAll(callback);
@@ -101,7 +101,7 @@ DBUtil.prototype.remove = function (queryObject,callback,dbUtil){
 			var query = client.query("DELETE FROM list WHERE key = $1;",[queryObject.getKey()]);
 			} catch(err){
 				console.log(err);
-			}	
+			}
 		//  var query = client.query("SELECT key FROM list WHERE value = $1;"[queryObject.getValue()]);
 		 query.on('end',function(results){
 		 	dbUtil.showAll(callback);

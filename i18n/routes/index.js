@@ -7,6 +7,9 @@ var ejs = require('ejs');
 var fs = require('fs');
 
 const path = require('path');
+const iosFile = 'Localizable.string';
+const andriodFile = 'Localizable.xml';
+
 var iosData = '';
 var andriodData = '';
 
@@ -16,59 +19,59 @@ var callback = function(result){
 }
 
 
-var createIOSFile = function(){
+var createIOSFile = function(downloadBlock){
 
-		fs.writeFile('helloworld.string', "");
-console.log("Creating......");
-		dbUtil.showIosValues(function(list){ 
+		fs.writeFile(iosFile, "");
+		dbUtil.showIosValues(function(list){
 				iosData = '';
-
 
 			list.forEach(function(val){
 				iosData += "\""+val.getKey() + "\" \= \"" + val.getValue() +"\"\; \n";
-				fs.writeFile('helloworld.string', iosData, function (err) {
+				fs.writeFile(iosFile, iosData, function (err) {
 		 	    if (err) return console.log(err);
-		  		console.log('helloworld.string created');
+		  		console.log(iosFile + ' created');
+					downloadBlock();
 			});
 		});
 	});
+
 }
-		
 
 
-var createAndriodFile = function(){
 
-fs.writeFile('helloworld.xml', "");
+var createAndriodFile = function(downloadBlock){
 
-	dbUtil.showAndroidValues(function(list){ 
+	fs.writeFile(andriodFile, "");
+	dbUtil.showIosValues(function(list){
 				andriodData = '';
 
 			list.forEach(function(val){
 				andriodData += "\<"+"string name"+"\="+"\""+val.getKey() + "\" \>\"" + val.getValue() + "\"\<\\"+"string"+"\> \n";
-				fs.writeFile('helloworld.xml', andriodData, function (err) {
+				fs.writeFile(andriodFile, andriodData, function (err) {
 		 	    if (err) return console.log(err);
-		  		console.log('helloworld.xml created');
+		  		console.log(andriodFile + ' created');
+					downloadBlock();
 			});
 		});
 	});
+
 }
 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	dbUtil.showAll(function(list){ 
+	dbUtil.showAll(function(list){
 		res.render('index.ejs',{ list : list});
 	});
 });
 
 router.post('/', function(req, res, next) {
 
-
 		if(req.body.hasOwnProperty('Update')){
 			console.log("Update",req.body);
 			var stringObject = new StringObject();
 			stringObject.initForView(req.body);
-			dbUtil.update(stringObject,function(list){ 
+			dbUtil.update(stringObject,function(list){
 			res.render('index.ejs',{ list : list});
 		},dbUtil);
 		}
@@ -76,19 +79,10 @@ router.post('/', function(req, res, next) {
 			console.log("remove");
 			var stringObject = new StringObject();
 			stringObject.initForView(req.body);
-			dbUtil.remove(stringObject,function(list){ 
+			dbUtil.remove(stringObject,function(list){
 			res.render('index.ejs',{ list : list});
 		},dbUtil);
 		}
-});
-
-router.get('/ios', function(req, res, next) {
-		res.sendFile(path.join(__dirname) + '/test.xml');
-	});
-
-router.post('/search', function(req, res, next){
-   dbUtil.search(req.body.clubname, callback);
-
 });
 
 router.post('/insert', function(req, res, next){
@@ -99,23 +93,43 @@ router.post('/insert', function(req, res, next){
 
 			}
 			else{
-					dbUtil.insertdb(stringObject,function(list){ 
+					dbUtil.insertdb(stringObject,function(list){
 			res.render('index.ejs',{ list : list});
 		},dbUtil);
 			}
-		
+
 });
 
 router.get('/generateIos', function(req, res, next) {
-	
-		createIOSFile();
 
+		var downloadBlock = function(){
+			res.download(iosFile, function(err){
+		  if (err) {
+		    console.log(err);
+		  } else {
+				console.log('success');
+		  }
+		});
+	};
+
+	createIOSFile(downloadBlock);
 
 });
-router.get('/generateAndroid', function(req, res, next) {
-	
-		createAndriodFile();
 
+router.get('/generateAndroid', function(req, res, next) {
+
+
+		var downloadBlock = function(){
+			res.download(andriodFile, function(err){
+			if (err) {
+				console.log(err);
+			} else {
+				console.log('success');
+			}
+		});
+		};
+
+		createAndriodFile(downloadBlock);
 
 });
 
