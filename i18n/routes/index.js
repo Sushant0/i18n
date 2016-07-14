@@ -15,10 +15,6 @@ var andriodData = '';
 
 var dbUtil = new DBUtil();
 
-var callback = function(result){
-}
-
-
 var createIOSFile = function(downloadBlock){
 
 		fs.writeFile(iosFile, "");
@@ -34,10 +30,7 @@ var createIOSFile = function(downloadBlock){
 			});
 		});
 	});
-
 }
-
-
 
 var createAndriodFile = function(downloadBlock){
 
@@ -65,23 +58,23 @@ router.get('/', function(req, res, next) {
 	});
 });
 
-router.post('/', function(req, res, next) {
+router.post('/post', function(req, res, next) {
 
 		if(req.body.hasOwnProperty('Update')){
 			console.log("Update",req.body);
 			var stringObject = new StringObject();
 			stringObject.initForView(req.body);
-			dbUtil.update(stringObject,function(list){
-			res.render('index.ejs',{ list : list});
-		},dbUtil);
+			dbUtil.update(stringObject,function (){
+        res.redirect('/');
+      });
 		}
 		else if (req.body.hasOwnProperty('Remove')) {
 			console.log("remove");
 			var stringObject = new StringObject();
 			stringObject.initForView(req.body);
-			dbUtil.remove(stringObject,function(list){
-			res.render('index.ejs',{ list : list});
-		},dbUtil);
+			dbUtil.remove(stringObject,function (){
+        res.redirect('/');
+      });
 		}
 });
 
@@ -93,9 +86,9 @@ router.post('/insert', function(req, res, next){
 
 			}
 			else{
-					dbUtil.insertdb(stringObject,function(list){
-			res.render('index.ejs',{ list : list});
-		},dbUtil);
+					dbUtil.insertdb(stringObject,function (){
+            res.redirect('/');
+          });
 			}
 
 });

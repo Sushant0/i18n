@@ -152,7 +152,7 @@
 	  <tbody>
 		  <%var test = "hello world"; list.forEach(function(val){ %>
 		  		<tr>
-		  		<form action="/" method="post">
+		  		<form action="/post" method="post">
 		  		<% console.log("Data : " + val.getValue() + val.getIsIOS()); %>
 			  		<input type="hidden" name="key" value=<%= val.getKey(); %> />
 			  		<td class="mdl-data-table__cell--non-numeric"><%= val.getValue(); %></td>

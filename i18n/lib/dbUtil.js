@@ -19,26 +19,15 @@ function connectDB(){
 	});
 }
 
-DBUtil.prototype.search = function (query1,callback){
-
-	var query = client.query("SELECT key FROM list WHERE value = $1 ", [query1]);
-    var rows = [];
-    query.on('row', function(row, res) {
-    rows.push(row);
-    callback(row.key)
-
-	});
-}
-
-DBUtil.prototype.insertdb = function (queryObject,callback,dbUtil){
+DBUtil.prototype.insertdb = function (queryObject,callback){
 	var query = client.query("INSERT into list values($1,  $2 ,  $3 ,  $4 ,  $5);",[queryObject.getKey(), queryObject.getValue(),queryObject.getIsIOS() ,queryObject.getIsAndriod() , queryObject.getIsVerified()] );
-	dbUtil.showAll(callback);
+	callback();
 
 }
 
 DBUtil.prototype.showAll = function (callback){
 	var list = [];
-	var query = client.query('SELECT * FROM list ORDER BY key ASC;');
+	var query = client.query('SELECT key, value, \"isAndriod\", \"isIOS\", \"isVerified\" FROM list ORDER BY key ASC;');
 	query.on('row',function(row){
 		var stringObject = new StringObject();
 		stringObject.initForDB(row);
@@ -47,12 +36,11 @@ DBUtil.prototype.showAll = function (callback){
 	query.on('end',function(results){
 		callback(list);
 	});
-
-	// console.log('showAll'+obj.getKey());
 }
+
 DBUtil.prototype.showAndroidValues = function (callback){
 	var list = [];
-	var query = client.query("SELECT * FROM list WHERE \"isAndriod\" is true AND \"isVerified\" is true;");
+	var query = client.query("SELECT key, value, \"isAndriod\", \"isIOS\", \"isVerified\" FROM list WHERE \"isAndriod\" is true AND \"isVerified\" is true;");
 	query.on('row',function(row){
 		var stringObject = new StringObject();
 		stringObject.initForDB(row);
@@ -61,12 +49,11 @@ DBUtil.prototype.showAndroidValues = function (callback){
 	query.on('end',function(results){
 		callback(list);
 	});
-
-	// console.log('showAll'+obj.getKey());
 }
+
 DBUtil.prototype.showIosValues = function (callback){
 	var list = [];
-	var query = client.query("SELECT * FROM list WHERE \"isIOS\" is true AND \"isVerified\" is true;");
+	var query = client.query("SELECT key, value, \"isAndriod\", \"isIOS\", \"isVerified\" FROM list WHERE \"isIOS\" is true AND \"isVerified\" is true;");
 	query.on('row',function(row){
 		var stringObject = new StringObject();
 		stringObject.initForDB(row);
@@ -75,19 +62,16 @@ DBUtil.prototype.showIosValues = function (callback){
 	query.on('end',function(results){
 		callback(list);
 	});
-
-	// console.log('showAll'+obj.getKey());
 }
 
-DBUtil.prototype.update = function (queryObject,callback,dbUtil){
+DBUtil.prototype.update = function (queryObject,callback){
 		try{
 		var query = client.query("UPDATE list SET value = $1 , \"isIOS\" = $2 , \"isAndriod\" = $3 , \"isVerified\" = $4 where key = $5;",[queryObject.getValue(),queryObject.getIsIOS() ,queryObject.getIsAndriod() , queryObject.getIsVerified() ,queryObject.getKey()]);
 		} catch(err){
 			console.log(err);
 		}
-	//  var query = client.query("SELECT key FROM list WHERE value = $1;"[queryObject.getValue()]);
 	 query.on('end',function(results){
-	 	dbUtil.showAll(callback);
+		callback();
 	});
 }
 var results = [];
@@ -96,15 +80,14 @@ query1.on('end', function() {
    console.log("List table successfully created");
 });
 
-DBUtil.prototype.remove = function (queryObject,callback,dbUtil){
+DBUtil.prototype.remove = function (queryObject,callback){
 	try{
 			var query = client.query("DELETE FROM list WHERE key = $1;",[queryObject.getKey()]);
 			} catch(err){
 				console.log(err);
 			}
-		//  var query = client.query("SELECT key FROM list WHERE value = $1;"[queryObject.getValue()]);
 		 query.on('end',function(results){
-		 	dbUtil.showAll(callback);
+		 	callback();
 		});
 }
 
