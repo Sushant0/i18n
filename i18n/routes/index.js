@@ -42,7 +42,7 @@ var createIOSFile = function(downloadBlock){
 var createAndriodFile = function(downloadBlock){
 
 	fs.writeFile(andriodFile, "");
-	dbUtil.showIosValues(function(list){
+	dbUtil.showAndroidValues(function(list){
 				andriodData = '';
 
 			list.forEach(function(val){
