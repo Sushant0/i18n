@@ -5,7 +5,6 @@ var connectionString = process.env.DATABASE_URL || 'postgres://localhost:5432/st
 var client = new pg.Client(connectionString);
 // client.connect();
 
-
 DBUtil = function (){
 	connectDB();
 }
