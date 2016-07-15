@@ -102,11 +102,11 @@
                   </td>
 
                   <td>
-                    <input type="checkbox" name="isIOS" value="on">
+                    <input type="checkbox" name="isAndriod" value="on">
                   </td>
 
                     <td>
-                      <input type="checkbox" name="isIOS" value="on">
+                      <input type="checkbox" name="isVerified" value="on">
                     </td>
                 </tr>
                 <tr>
@@ -129,13 +129,11 @@
     </div>
 </div>
 
-	<table class="mdl-data-table mdl-js-data-table" style="position:fixed;
-    top: 50%;
-    left: 50%;
+	<table class="mdl-data-table mdl-js-data-table" style="position:absolute;
+    top: 10%;
+    left: 25%;
     width:30em;
     height:18em;
-    margin-top: -12em;
-    margin-left: -25em;
     border: 1px solid #ccc;
     background-color: #f3f3f3;" align="center" >
 	  <thead>
@@ -155,7 +153,7 @@
 		  		<form action="/post" method="post">
 		  		<% console.log("Data : " + val.getValue() + val.getIsIOS()); %>
 			  		<input type="hidden" name="key" value=<%= val.getKey(); %> />
-			  		<td class="mdl-data-table__cell--non-numeric"><%= val.getValue(); %></td>
+			  		<td class="mdl-data-table__cell--non-numeric"><%= val.getKey(); %></td>
 				    <td><input type="label" name="value" value="<%= val.getValue() %>"></td>
 				    <td><input type="checkbox" name="isIOS"
 				    	<% if(val.getIsIOS()){ %>
