@@ -36,10 +36,10 @@
   width:600px;
   clear:both;
   text-align: center;
-  left: 50%;
-  align-content: center;
-  margin-left: -20em;
+  left: 25em;
   position: fixed;
+
+  z-index: 2;
   border: 1px solid #ccc;
   background-color: #f3f3f3;"
 
@@ -75,8 +75,10 @@
     </div>
 
         <table id="holder" class="mdl-data-table mdl-js-data-table" style="display:none;
-        position: relative;
+        position: fixed;
         width:45em;
+        z-index: 2;
+        left: 25em;
         border: 1px solid #ccc;
         background-color: #f3f3f3;" align="center">
         	  <thead>
@@ -151,8 +153,7 @@
 		  <%var test = "hello world"; list.forEach(function(val){ %>
 		  		<tr>
 		  		<form action="/post" method="post">
-		  		<% console.log("Data : " + val.getValue() + val.getIsIOS()); %>
-			  		<input type="hidden" name="key" value=<%= val.getKey(); %> />
+			  		<input type="hidden" name="key" value="<%= val.getKey(); %>" />
 			  		<td class="mdl-data-table__cell--non-numeric"><%= val.getKey(); %></td>
 				    <td><input type="label" name="value" value="<%= val.getValue() %>"></td>
 				    <td><input type="checkbox" name="isIOS"
