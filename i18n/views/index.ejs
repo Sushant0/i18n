@@ -68,7 +68,7 @@
       </div>
       <div id="second">
         <form action="/generateAndroid" method="get" style="padding-top: 10px;">
-        <button type="submit" value="Android"> Andriod </button></form>
+        <button type="submit" value="Android"> Android </button></form>
       </div>
       <div id="third" style="padding-top: 10px;">
         <button type="button" value="Submit" onClick = "openAddDialog()" > Add </button>
@@ -87,7 +87,7 @@
                   <th class="mdl-data-table__cell--non-numeric">Key</th>
                   <th>Value</th>
                   <th>IOS</th>
-                  <th>Andriod</th>
+                  <th>Android</th>
                   <th>Verified</th>
                 </tr>
               </thead>
@@ -105,7 +105,7 @@
                   </td>
 
                   <td>
-                    <input type="checkbox" name="isAndriod" value="on">
+                    <input type="checkbox" name="isAndroid" value="on">
                   </td>
 
                     <td>
@@ -148,7 +148,7 @@
 	      <th class="mdl-data-table__cell--non-numeric">Key</th>
 	      <th>Value</th>
 	      <th>IOS</th>
-	      <th>Andriod</th>
+	      <th>Android</th>
 	      <th>Verified</th>
 	      <th></th>
 	      <th></th>
@@ -166,8 +166,8 @@
 					    	<%= "checked" %>
 				    	<% } %>
 			    	></td>
-				    <td><input type="checkbox" name="isAndriod"
-					    <% if(val.getIsAndriod()){ %>
+				    <td><input type="checkbox" name="isAndroid"
+					    <% if(val.getIsAndroid()){ %>
 					    	<%= "checked" %>
 				    	<% } %>
 			    	></td>

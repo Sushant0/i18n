@@ -32,14 +32,14 @@ var createIOSFile = function(downloadBlock){
 	});
 }
 
-var createAndriodFile = function(downloadBlock){
+var createAndroidFile = function(downloadBlock){
 
 	fs.writeFile(andriodFile, "");
 	dbUtil.showAndroidValues(function(list){
 				andriodData = '';
 
 			list.forEach(function(val){
-				andriodData += "\<"+"string name"+"\="+"\""+val.getKey() + "\" \>\"" + val.getValue() + "\"\<\\"+"string"+"\> \n";
+				andriodData += "\<"+"string name"+"\="+"\""+val.getKey() + "\"\>"+val.getValue()+"</"+"string"+"\> \n";
 				fs.writeFile(andriodFile, andriodData, function (err) {
 		 	    if (err) return console.log(err);
 		  		console.log(andriodFile + ' created');
@@ -148,7 +148,7 @@ router.get('/generateAndroid',isLoggedIn, function(req, res, next) {
 		});
 		};
 
-		createAndriodFile(downloadBlock);
+		createAndroidFile(downloadBlock);
 
 });
 
