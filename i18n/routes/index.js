@@ -55,7 +55,7 @@ var createAndriodFile = function(downloadBlock){
 function isLoggedIn(req, res, next) {
 
     // if user is authenticated in the session, carry on
-    if (req.isAuthenticated())
+    if (req.isAuthenticated() && req._passport.session.user.domain === 'freshdesk.com')
         return next();
 
     // if they aren't redirect them to the home page
@@ -76,8 +76,8 @@ passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/useri
 /* GET home page. */
 
 router.get('/',isLoggedIn, function(req, res, next) {
-	dbUtil.showAll(function(list){
-		res.render('index.ejs',{ list : list});
+	dbUtil.showAll(req._passport.session.user,function(list,user){
+		res.render('index.ejs',{ list : list , user : user});
 	});
 });
 
@@ -138,7 +138,6 @@ router.get('/generateIos',isLoggedIn, function(req, res, next) {
 
 router.get('/generateAndroid',isLoggedIn, function(req, res, next) {
 
-
 		var downloadBlock = function(){
 			res.download(andriodFile, function(err){
 			if (err) {
@@ -152,9 +151,6 @@ router.get('/generateAndroid',isLoggedIn, function(req, res, next) {
 		createAndriodFile(downloadBlock);
 
 });
-
-
-
 
 
 module.exports = router;

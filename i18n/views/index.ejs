@@ -60,6 +60,7 @@
 
   </head>
   <body>
+    <div style="position: absolute;"><%= 'Hello '+ user.displayName +'.' %></div>
     <div id="wrapper">
       <div id="first">
         <form action="/generateIos" method="get" style="padding-top: 10px;">
@@ -108,7 +109,11 @@
                   </td>
 
                     <td>
-                      <input type="checkbox" name="isVerified" value="on">
+                      <input type="checkbox" name="isVerified" value="on"
+                        <% if(user.email !== 'shankarganesh@freshdesk.com') {%>
+                          <%= "disabled" %>
+                        <% } %>
+                      >
                     </td>
                 </tr>
                 <tr>
@@ -150,7 +155,7 @@
 	    </tr>
 	  </thead>
 	  <tbody>
-		  <%var test = "hello world"; list.forEach(function(val){ %>
+		  <% list.forEach(function(val){ %>
 		  		<tr>
 		  		<form action="/post" method="post">
 			  		<input type="hidden" name="key" value="<%= val.getKey(); %>" />
@@ -170,6 +175,9 @@
 					    <% if(val.getIsVerified()){ %>
 					    	<%= "checked" %>
 				    	<% } %>
+              <% if(user.email !== 'shankarganesh@freshdesk.com') {%>
+              <%= "disabled" %>
+            <% } %>
 			    	></td>
 				    <td><button type="submit" name="Update"> Update </button></td>
 				    <td><button type="submit" name="Remove"> Remove </button></td>

@@ -30,9 +30,9 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 passport.use(new GoogleStrategy({
-    // add clientID
-    // clientSecret
-    // callbackURL
+  // add clientID
+  // clientSecret
+  // callbackURL
   },
   function(accessToken, refreshToken, profile, done) {
     return done(null, profile);
@@ -40,7 +40,8 @@ passport.use(new GoogleStrategy({
 ));
 
 passport.serializeUser(function(user, done) {
-  done(null, user.id);
+  userDetail = {id:user.id, displayName:user.displayName, email:user.emails[0].value , domain:user._json.domain};
+  done(null, userDetail);
 });
 
 passport.deserializeUser(function(id, done) {

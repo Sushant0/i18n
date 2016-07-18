@@ -25,7 +25,7 @@ DBUtil.prototype.insertdb = function (queryObject,callback){
 
 }
 
-DBUtil.prototype.showAll = function (callback){
+DBUtil.prototype.showAll = function (user,callback){
 	var list = [];
 	var query = client.query('SELECT key, value, \"isAndriod\", \"isIOS\", \"isVerified\" FROM list ORDER BY key ASC;');
 	query.on('row',function(row){
@@ -34,7 +34,7 @@ DBUtil.prototype.showAll = function (callback){
 		list.push(stringObject);
 	});
 	query.on('end',function(results){
-		callback(list);
+		callback(list,user);
 	});
 }
 
