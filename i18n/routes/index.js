@@ -5,6 +5,7 @@ var express = require('express');
 var router = express.Router();
 var ejs = require('ejs');
 var fs = require('fs');
+var passport = require('passport');
 
 const path = require('path');
 const iosFile = 'Localizable.string';
@@ -14,7 +15,6 @@ var iosData = '';
 var andriodData = '';
 
 var dbUtil = new DBUtil();
-
 var createIOSFile = function(downloadBlock){
 
 		fs.writeFile(iosFile, "");
@@ -50,15 +50,42 @@ var createAndriodFile = function(downloadBlock){
 
 }
 
+// route middleware to make sure a user is logged in
+
+function isLoggedIn(req, res, next) {
+
+    // if user is authenticated in the session, carry on
+    if (req.isAuthenticated())
+        return next();
+
+    // if they aren't redirect them to the home page
+    console.log("login fail");
+    res.redirect('/login');
+}
+
+router.get('/auth/google',
+passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/userinfo.email'] }));
+
+	// the callback after google has authenticated the user
+  router.get('/auth/google/callback',
+      passport.authenticate('google', { failureRedirect: '/test' }),
+  function(req, res) {
+  res.redirect('/');
+  });
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+
+router.get('/',isLoggedIn, function(req, res, next) {
 	dbUtil.showAll(function(list){
 		res.render('index.ejs',{ list : list});
 	});
 });
 
-router.post('/post', function(req, res, next) {
+router.get('/login', function(req, res, next) {
+  res.render('login.ejs');
+});
+
+router.post('/post',isLoggedIn, function(req, res, next) {
 
 		if(req.body.hasOwnProperty('Update')){
 			console.log("Update",req.body);
@@ -78,7 +105,7 @@ router.post('/post', function(req, res, next) {
 		}
 });
 
-router.post('/insert', function(req, res, next){
+router.post('/insert',isLoggedIn, function(req, res, next){
 			var stringObject = new StringObject();
 			stringObject.initForView(req.body);
 			if(stringObject.getValue()==""|| stringObject.getKey()=="")
@@ -93,7 +120,7 @@ router.post('/insert', function(req, res, next){
 
 });
 
-router.get('/generateIos', function(req, res, next) {
+router.get('/generateIos',isLoggedIn, function(req, res, next) {
 
 		var downloadBlock = function(){
 			res.download(iosFile, function(err){
@@ -109,7 +136,7 @@ router.get('/generateIos', function(req, res, next) {
 
 });
 
-router.get('/generateAndroid', function(req, res, next) {
+router.get('/generateAndroid',isLoggedIn, function(req, res, next) {
 
 
 		var downloadBlock = function(){
