@@ -20,14 +20,14 @@ var createIOSFile = function(downloadBlock){
 		fs.writeFile(iosFile, "");
 		dbUtil.showIosValues(function(list){
 				iosData = '';
-
 			list.forEach(function(val){
 				iosData += "\""+val.getKey() + "\" \= \"" + val.getValue() +"\"\; \n";
-				fs.writeFile(iosFile, iosData, function (err) {
-		 	    if (err) return console.log(err);
-		  		console.log(iosFile + ' created');
-					downloadBlock();
 			});
+			
+			fs.writeFile(iosFile, iosData, function (err) {
+				if (err) return console.log(err);
+				// console.log(iosFile + ' created');
+				downloadBlock();
 		});
 	});
 }
@@ -35,19 +35,20 @@ var createIOSFile = function(downloadBlock){
 var createAndroidFile = function(downloadBlock){
 
 	fs.writeFile(andriodFile, "");
-	dbUtil.showAndroidValues(function(list){
-				andriodData = '';
+		dbUtil.showAndroidValues(function(list){
 
-			list.forEach(function(val){
-				andriodData += "\<"+"string name"+"\="+"\""+val.getKey() + "\"\>"+val.getValue()+"</"+"string"+"\> \n";
-				fs.writeFile(andriodFile, andriodData, function (err) {
-		 	    if (err) return console.log(err);
-		  		console.log(andriodFile + ' created');
-					downloadBlock();
+					andriodData =	'<?xml version="1.0" encoding="utf-8"?> \n<resources>\n';
+				list.forEach(function(val){
+					andriodData += "	\<"+"string name"+"\="+"\""+val.getKey() + "\"\>"+val.getValue()+"</"+"string"+"\> \n";
 			});
+
+			andriodData += '\n</resources>';
+			fs.writeFile(andriodFile, andriodData, function (err) {
+				if (err) return console.log(err);
+				console.log(andriodFile + ' created');
+				downloadBlock();
 		});
 	});
-
 }
 
 // route middleware to make sure a user is logged in

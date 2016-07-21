@@ -20,7 +20,7 @@ function connectDB(){
 }
 
 DBUtil.prototype.insertdb = function (queryObject,callback){
-	var query = client.query("INSERT into list values($1,  $2 ,  $3 ,  $4 ,  $5);",[queryObject.getKey(), queryObject.getValue(),queryObject.getIsIOS() ,queryObject.getIsAndroid() , queryObject.getIsVerified()] );
+	var query = client.query("INSERT into list(key, value, \"isAndroid\", \"isIOS\", \"isVerified\") values($1,  $2 ,  $3 ,  $4 ,  $5);",[queryObject.getKey(), queryObject.getValue(), queryObject.getIsAndroid(), queryObject.getIsIOS(), queryObject.getIsVerified()] );
 	callback();
 
 }
@@ -40,7 +40,7 @@ DBUtil.prototype.showAll = function (user,callback){
 
 DBUtil.prototype.showAndroidValues = function (callback){
 	var list = [];
-	var query = client.query("SELECT key, value, \"isAndroid\", \"isIOS\", \"isVerified\" FROM list WHERE \"isAndroid\" is true AND \"isVerified\" is true;");
+	var query = client.query("SELECT key, value, \"isAndroid\", \"isIOS\", \"isVerified\" FROM list WHERE \"isAndroid\" is true AND \"isVerified\" is true ORDER BY key ASC;");
 	query.on('row',function(row){
 		var stringObject = new StringObject();
 		stringObject.initForDB(row);
@@ -53,7 +53,7 @@ DBUtil.prototype.showAndroidValues = function (callback){
 
 DBUtil.prototype.showIosValues = function (callback){
 	var list = [];
-	var query = client.query("SELECT key, value, \"isAndroid\", \"isIOS\", \"isVerified\" FROM list WHERE \"isIOS\" is true AND \"isVerified\" is true;");
+	var query = client.query("SELECT key, value, \"isAndroid\", \"isIOS\", \"isVerified\" FROM list WHERE \"isIOS\" is true AND \"isVerified\" is true ORDER BY key ASC;");
 	query.on('row',function(row){
 		var stringObject = new StringObject();
 		stringObject.initForDB(row);
