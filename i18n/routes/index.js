@@ -8,7 +8,7 @@ var fs = require('fs');
 var passport = require('passport');
 
 const path = require('path');
-const iosFile = 'Localizable.string';
+const iosFile = 'Localizable.strings';
 const andriodFile = 'Localizable.xml';
 
 var iosData = '';
@@ -21,9 +21,11 @@ var createIOSFile = function(downloadBlock){
 		dbUtil.showIosValues(function(list){
 				iosData = '';
 			list.forEach(function(val){
-				iosData += "\""+val.getKey() + "\" \= \"" + val.getValue() +"\"\; \n";
+				var value = val.getValue();
+				value = value.replace(/%[0-9]\$s/g, "%@");
+				iosData += "\""+val.getKey() + "\" \= \"" + value +"\"\; \n";
 			});
-			
+
 			fs.writeFile(iosFile, iosData, function (err) {
 				if (err) return console.log(err);
 				// console.log(iosFile + ' created');
